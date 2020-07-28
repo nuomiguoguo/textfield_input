@@ -84,6 +84,7 @@
     return string;
 }
 
+
 #pragma mark - delegate
 
 - (void)textFieldDidChanged:(UITextField *)textField
@@ -105,9 +106,9 @@
         }
         //然后在进行最大长度截取
         NSString *getStr = [self getSubString:toBeString maxNumber:self.max_length];
-        if (!_isDelete && getStr.length < _currentString.length ) {
-            //如果不是删除键，出现了删除的现象。则需要用之前的值覆盖当前..
-            //处理连续输入英文或者- 带来的删除现象。
+        if (!_isDelete && textField.text.length > 0 && getStr.length < _currentString.length ) {
+            //如果是在输入的时候，出现了回删的现象。则需要用之前的值覆盖当前..
+            //主要处理处理连续输入英文或者 - 系统带来的删除现象。
             getStr = _currentString;
         }
          textField.text = getStr;
@@ -136,6 +137,7 @@
     if (!_contentTextField) {
         _contentTextField = [[UITextField alloc] initWithFrame:self.bounds];
         [_contentTextField addTarget:self action:@selector(textFieldDidChanged:) forControlEvents:UIControlEventEditingChanged];
+        _contentTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _contentTextField.delegate = self;
 
        _contentTextField.autocorrectionType = UITextAutocorrectionTypeNo;//关闭自动联想
